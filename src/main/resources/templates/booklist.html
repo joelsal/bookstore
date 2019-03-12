@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	  xmlns:th="http://www.thymeleaf.org">
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<title>Bookstore</title>
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
+	<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
 	<h2>Bookstore</h2>
 	<table class="table table-striped">
 		<tr>
@@ -22,14 +27,17 @@
 			<td th:text = "${book.price}"></td>
 			<td th:text = "${book.year}"></td>
 			<td th:text="${book.category.name}"></td>
-			<td>
-				<a th:href="@{/delete/{id}(id=${book.id})}">Delete</a>
+			<td sec:authorize="hasRole('ADMIN')">
+				<a th:href="@{/delete/{id}(id=${book.id})}" class="btn btn-danger">Delete</a>
 			</td>
 			<td>
 				<a th:href="@{/edit/{id}(id=${book.id})}">Edit</a>
 			</td>
 		</tr>
 	</table>
-	<a href="/add" class="btn btn-primary">Add Book</a>
+	<a href="/add" class="btn btn-success">Add Book</a>
+	<form th:action="@{/logout}" method="post">
+		<input type="submit" value="Sign Out" class="btn btn-danger"/>
+	</form>
 </body>
 </html>

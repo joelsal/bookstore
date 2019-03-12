@@ -1,6 +1,7 @@
 package com.example.bookstore.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,11 @@ public class BookController {
 	
 	@Autowired
 	private CategoryRepository crepository;
+	
+	@RequestMapping(value="/login")
+	public String login() {
+		return "login";
+	}
 	
 	@RequestMapping(value = "/booklist")
 	public String bookList(Model model) {
@@ -39,6 +45,7 @@ public class BookController {
 	}
 	
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteBook(@PathVariable("id") long bookId, Model model) {
 		repository.deleteById(bookId);
 		return "redirect:../booklist";
